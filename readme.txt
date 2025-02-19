@@ -7,7 +7,7 @@ Stable tag: 1.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://ashevillewebdesign.com
+Donate link: https://ashevillewebdesign.com/
 
 == Description ==
 Easily connect Elementor Pro forms to Sendy and automatically subscribe users to your email list.
