@@ -1,4 +1,4 @@
-=== Sendy Elementor Integration ===
+=== Integration Sendy for Elementor ===
 Contributors: ashevillewebdesign
 Tags: sendy, elementor form integration, elementor email marketing, email automation, subscribe forms
 Requires at least: 5.0
@@ -13,9 +13,9 @@ Donate link: https://ashevillewebdesign.com/
 Easily connect Elementor Pro forms to Sendy and automatically subscribe users to your email list.
 
 == Installation ==
-1. Upload the `sendy-elementor-integration` folder to the `/wp-content/plugins/` directory.
+1. Upload the `integration-sendy-elementor` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Go to **Settings > Sendy Elementor** to enter your API details.
+3. Go to **Settings > Integration Sendy for Elementor** to enter your API details.
 
 == Frequently Asked Questions ==
 = Do I need Elementor Pro? =

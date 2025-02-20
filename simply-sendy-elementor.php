@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Sendy Elementor Integration
+ * Plugin Name: Integration Sendy for Elementor
  * Description: Easily connect Elementor Pro forms to Sendy and automatically subscribe users.
  * Version: 1.0
  * Author: Asheville Web Design
@@ -61,7 +61,7 @@ class Sendy_Elementor_Integration {
 
     public function settings_page_html() {
         echo '<div class="wrap">';
-        echo '<h1>Sendy Elementor Integration</h1>';
+        echo '<h1>Integration Sendy for Elementor</h1>';
         echo '<form method="post" action="options.php">';
         settings_fields('sendy_elementor_settings');
         do_settings_sections('sendy-elementor');
