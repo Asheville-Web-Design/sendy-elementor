@@ -26,7 +26,7 @@ class Sendy_Elementor_Integration {
     }
 
     public function create_settings_page() {
-        add_options_page('Sendy Elementor Settings', 'Sendy Elementor', 'manage_options', 'sendy-elementor', [$this, 'settings_page_html']);
+        add_options_page('Integration Sendy for Elementor Settings', 'Integration Sendy for Elementor', 'manage_options', 'sendy-elementor', [$this, 'settings_page_html']);
     }
 
     public function setup_settings() {
