@@ -10,6 +10,7 @@
  * Requires at least: 5.0
  * Tested up to: 6.7
  * Requires PHP: 7.2
+ * Requires Plugins: elementor
  */
 
 if (!defined('ABSPATH')) {
@@ -30,13 +31,27 @@ class Sendy_Elementor_Integration {
     }
 
     public function setup_settings() {
-        register_setting('sendy_elementor_settings', 'sendy_elementor_options');
+        register_setting(
+            'sendy_elementor_settings',
+            'sendy_elementor_options',
+            array(
+                'sanitize_callback' => [$this, 'sanitize_options']
+            )
+        );
+
         add_settings_section('sendy_section', 'Sendy API Settings', null, 'sendy-elementor');
-        
+
+        add_settings_field('sendy_url', 'Sendy Installation URL', [$this, 'sendy_url_callback'], 'sendy-elementor', 'sendy_section');
         add_settings_field('api_key', 'Sendy API Key', [$this, 'api_key_callback'], 'sendy-elementor', 'sendy_section');
         add_settings_field('list_id', 'Sendy List ID', [$this, 'list_id_callback'], 'sendy-elementor', 'sendy_section');
         add_settings_field('name_field', 'Elementor Name Field ID', [$this, 'name_field_callback'], 'sendy-elementor', 'sendy_section');
         add_settings_field('email_field', 'Elementor Email Field ID', [$this, 'email_field_callback'], 'sendy-elementor', 'sendy_section');
+    }
+
+    public function sendy_url_callback() {
+        $options = get_option('sendy_elementor_options');
+        echo '<input type="text" name="sendy_elementor_options[sendy_url]" value="' . esc_url($options['sendy_url'] ?? '') . '" class="regular-text">';
+        echo '<p class="description">Enter your Sendy installation URL (e.g., https://your-sendy.com).</p>';
     }
 
     public function api_key_callback() {
@@ -70,12 +85,39 @@ class Sendy_Elementor_Integration {
         echo '</div>';
     }
 
+    public function sanitize_options($options) {
+        $sanitized_options = array();
+
+        if (isset($options['sendy_url'])) {
+            $sanitized_options['sendy_url'] = esc_url_raw($options['sendy_url']);
+        }
+
+        if (isset($options['api_key'])) {
+            $sanitized_options['api_key'] = sanitize_text_field($options['api_key']);
+        }
+
+        if (isset($options['list_id'])) {
+            $sanitized_options['list_id'] = sanitize_text_field($options['list_id']);
+        }
+
+        if (isset($options['name_field'])) {
+            $sanitized_options['name_field'] = sanitize_text_field($options['name_field']);
+        }
+
+        if (isset($options['email_field'])) {
+            $sanitized_options['email_field'] = sanitize_text_field($options['email_field']);
+        }
+
+        return $sanitized_options;
+    }
+
     public function send_to_sendy($record, $handler) {
         $options = get_option('sendy_elementor_options');
-        if (empty($options['api_key']) || empty($options['list_id'])) {
-            return; // Exit if API key or list ID is missing
+
+        if (empty($options['sendy_url']) || empty($options['api_key']) || empty($options['list_id'])) {
+            return; // Exit if required fields are missing
         }
-        
+
         $form_data = $record->get('fields');
         $name = isset($form_data[$options['name_field']]) ? sanitize_text_field($form_data[$options['name_field']]['value']) : '';
         $email = isset($form_data[$options['email_field']]) ? sanitize_email($form_data[$options['email_field']]['value']) : '';
@@ -84,7 +126,8 @@ class Sendy_Elementor_Integration {
             return;
         }
 
-        $sendy_url = 'https://sendy.hchad.com/subscribe';
+        $sendy_url = trailingslashit($options['sendy_url']) . 'subscribe';
+
         $post_data = [
             'api_key' => $options['api_key'],
             'name'    => $name,
